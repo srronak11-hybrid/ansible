@@ -1,0 +1,16 @@
+- hosts: 
+  - web1
+  - yum
+  vars_prompt:
+         - name: dnsip 
+           prompt: "what is your dns ip"
+           private: no
+  tasks:
+   - template:
+        src: dns.conf
+        dest: /etc/resolve.conf
+     register: x
+   - debug:
+       var: 
+          x.changed,
+          x.failed,     

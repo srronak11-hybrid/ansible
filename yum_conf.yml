@@ -1,0 +1,43 @@
+- hosts: web1
+  name: installing the docker version through ansible
+  vars:
+   - describe: for test purpose
+  tasks:
+   - name: add repository first
+     yum_repository:
+             name: "dvd1"
+             baseurl: /run/media/root/RHEL-8-0-0-BaseOS-x86_64/AppStream
+             gpgcheck: no
+             description: "{{ describe }}"
+             #  warn: false
+
+   - name: add repository second
+     yum_repository:
+             name: "dvd2"
+             baseurl: /run/media/root/RHEL-8-0-0-BaseOS-x86_64/BaseOS
+             gpgcheck: no
+             description: "{{ describe }}"
+            # warn: false
+
+   - name: add repository third
+     yum_repository:
+             name: "docker"
+             baseurl: https://download.docker.com/linux/centos/7/x86_64/stable
+             gpgcheck: no
+             description: "{{ describe }}"
+             #  warn: false
+             
+   - name: install the latest docker version
+     yum:
+       name: "docker-ce-18.06.3.ce-3.el7.x86_64"
+       state: present
+  
+   - command: yum clean all
+   
+   - command: yum clean metadata
+
+   - service: 
+       name: "docker"
+       state: started      
+       enabled: yes
+
